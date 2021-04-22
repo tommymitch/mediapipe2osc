@@ -1,11 +1,6 @@
----
-layout: default
-title: Home
-nav_order: 1
----
 # MediaPipe2Osc
 
-This repository contains MediaPipe2Osc a modified version of Google's [MediaPipe](https://github.com/google/mediapipe) framework that sends motion tracking data as [Open Sound Control](https://en.wikipedia.org/wiki/Open_Sound_Control) (OSC) encoded datagram packets. This enables landmarks and other tracking information to be used within any OSC compatible environment (e.g. Max/MSP, Python, PD, C++, Processing, you name it, see the [oscexamples](oscexamples/) folder). 
+This repository contains MediaPipe2Osc, a modified version of Google's [MediaPipe](https://github.com/google/mediapipe) framework that sends motion tracking data as [Open Sound Control](https://en.wikipedia.org/wiki/Open_Sound_Control) (OSC) encoded datagram packets. This enables landmarks and other tracking information to be used within any OSC compatible environment (e.g. Max/MSP, Python, PD, C++, Processing, you name it, see the [oscexamples](oscexamples/) folder). 
 
 ![!Mediapipe2osc Max Example](docs/images/mediapipe2osc.gif)
 
@@ -26,7 +21,7 @@ Now install [Xcode](https://developer.apple.com/xcode/) and its Command Line too
 xcode-select --install
 ```
 
-MediaPipe requires [OpenCV](https://opencv.org/) and [FFmpeg](https://www.ffmpeg.org/)). I'd recommend  installing these with [Homebrew](https://brew.sh/), which can be installed as follows:
+MediaPipe requires [OpenCV](https://opencv.org/) and [FFmpeg](https://www.ffmpeg.org/). I'd recommend  installing these with [Homebrew](https://brew.sh/), which can be installed as follows:
 
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -55,11 +50,11 @@ GLOG_logtostderr=1 bazel-bin/mediapipe/examples/desktop/hand_tracking/hand_track
 
 Landmarks are streamed as UDP datagrams in OSC format on port 8000. 
 
-The osc address pattern is either `/left` or `/right` for detected hands followed by 63 float32 arguments which are the x, y, z coordinates of the 21 landmarks shown below. 
+The OSC address pattern is either `/left` or `/right` for detected hands followed by 63 float32 arguments which are the x, y, z coordinates of the 21 landmarks shown below. 
 
 ![!Hand landmarks](docs/images/mobile/hand_landmarks.png)
 
-That is, the 1st, 2nd and 3rd arguments are the `x`, `y` and `z` coordinates of the wrist landmark, etc.
+That is, the 1st, 2nd and 3rd arguments are the `x`, `y` and `z` coordinates of the `WRIST` landmark, etc.
 
 The `x` and `y` values are in the range `0.0` to `1.0` and represent the position of the landmark relative to the camera image height and width. The `z` value is a depth estimation which is relative to the wrist and can be -ve.
 
@@ -70,9 +65,5 @@ This project was developed by [Tom Mitchell](https://go.uwe.ac.uk/tom) [@teamaxe
 - [University of the West of England](https://uwe.ac.uk)
 - [MiMU Gloves Ltd](https://mimugloves.com/)
 
-<img src="docs/images/bbcrd.png" alt="Bristol and Bath Creative R+D" height="30"/>
-<img src="docs/images/ctl.png" alt="Creative Technologies Lab" height="30"/>
-<img src="docs/images/mimu.png" alt="MiMU Gloves" height="30"/>
-<img src="docs/images/uwe.png" alt="UWE, Bristol" height="30"/>
-<img src="docs/images/mediapipe_small.png" alt="MediaPipe" height="30"/>
+<img src="docs/images/bbcrd.png" alt="Bristol and Bath Creative R+D" height="30"/><img src="docs/images/ctl.png" alt="Creative Technologies Lab" height="30"/><img src="docs/images/mimu.png" alt="MiMU Gloves" height="30"/><img src="docs/images/uwe.png" alt="UWE, Bristol" height="30"/><img src="docs/images/mediapipe_small.png" alt="MediaPipe" height="30"/>
 
