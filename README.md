@@ -21,15 +21,18 @@ Now install [Xcode](https://developer.apple.com/xcode/) and its Command Line too
 xcode-select --install
 ```
 
-MediaPipe requires [OpenCV](https://opencv.org/) and [FFmpeg](https://www.ffmpeg.org/). I'd recommend  installing these with [Homebrew](https://brew.sh/), which can be installed as follows:
+MediaPipe requires [Bazel](https://www.bazel.build/) [OpenCV](https://opencv.org/) and [FFmpeg](https://www.ffmpeg.org/). I'd recommend  installing these with [Homebrew](https://brew.sh/), which can be installed as follows:
 
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
-Then run:
-
+Now install bazelisk:
 ```sh
-brew install opencv@3
+brew install bazelisk
+```
+and 
+```sh
+brew install opencv@3 (which includes FFmpeg)
 ```
 There is a known issue caused by the glog dependency, so uninstall glog:
 
