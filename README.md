@@ -50,11 +50,22 @@ And run:
 GLOG_logtostderr=1 bazel-bin/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu   --calculator_graph_config_file=mediapipe/graphs/hand_tracking/hand_tracking_desktop_live.pbtxt
 ```
 
-Landmarks will be streamed as UDP datagrams in OSC format on port 8000.
+---
+# OSC Dictionary
+
+Landmarks are streamed as UDP datagrams in OSC format on port 8000. 
+
+The osc address pattern is either `/left` or `/right` for detected hands followed by 63 float32 arguments which are the x, y, z coordinates of the 21 landmarks shown below. 
+
+![!Hand landmarks](docs/images/mobile/hand_landmarks.png)
+
+That is, the 1st, 2nd and 3rd arguments are the `x`, `y` and `z` coordinates of the wrist landmark, etc.
+
+The `x` and `y` values are in the range `0.0` to `1.0` and represent the position of the landmark relative to the camera image height and width. The `z` value is a depth estimation which is relative to the wrist and can be -ve.
 
 ---
 # Info
-This project was developed by [Tom Mitchell](https://go.uwe.ac.uk/tom) with support from the: 
+This project was developed by [Tom Mitchell](https://go.uwe.ac.uk/tom) [@teamaxe](https:twitter.com/teamaxe) with support from: 
 - [Bristol and Bath Creative R+D (AHRC)](https://bristolbathcreative.org/)
 - [University of the West of England](https://uwe.ac.uk)
 - [MiMU Gloves Ltd](https://mimugloves.com/)
