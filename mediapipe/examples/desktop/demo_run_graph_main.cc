@@ -93,59 +93,6 @@ absl::Status RunMPPGraph() {
   ASSIGN_OR_RETURN(mediapipe::OutputStreamPoller poller_handidness,
                    graph.AddOutputStreamPoller(kHandidnessStream));
 
-//    MP_RETURN_IF_ERROR(
-//    graph.ObserveOutputStream(kLandmarksStream,
-//                              [&graph](const mediapipe::Packet& packet) -> ::mediapipe::Status 
-//                              {
-//                                //std::cout << packet.DebugTypeName() << std::endl;
-//                                //auto landmarks = packet.Get<std::vector<mediapipe::NormalizedLandmarkList>>();
-//                                //std::cout << landmarks.size() << std::endl;
-//                                //std::cout << landmarks.DebugString();
-//                                //std::cout << "Handy!!!!" << std::endl;
-//                                //int i = 0;
-//                                //for (const auto& landmark : landmarks) 
-//                                //    {
-//                                //        std::cout << "*landmark*" << i++ << " : " << landmark.DebugString();
-//                                //    }
-//                                return mediapipe::OkStatus();
-//                              }));
-//
-//    MP_RETURN_IF_ERROR(
-//    graph.ObserveOutputStream(kHandidnessStream,
-//                              [&graph](const mediapipe::Packet& packet) -> ::mediapipe::Status 
-//                              {
-//                                //std::cout << packet.DebugTypeName() << std::endl;
-//                                auto handedness = packet.Get<std::vector<mediapipe::ClassificationList>>();
-//                                //handidness.DebugString();
-//                                //std::cout << "Handy!!!!" << std::endl;
-//                                //int i = 0;
-//                                //    for (const auto& hand : handedness) 
-//                                //    {
-//                                //        std::cout << "-hand-" << i++ << " : " << hand.DebugString();
-//                                //    }
-//                                return mediapipe::OkStatus();
-//                              }));
-
-    
-//    MP_RETURN_IF_ERROR(
-//    graph.ObserveOutputStream(kMultipalmStream,
-//                              [&graph](const mediapipe::Packet& packet) -> ::mediapipe::Status 
-//                              {
-//                                std::cout << packet.DebugTypeName() << std::endl;
-//                                //auto handedness = packet.Get<std::vector<mediapipe::ClassificationList>>();
-//                                //handidness.DebugString();
-//                                //std::cout << "Handy!!!!" << std::endl;
-//                                //int i = 0;
-//                                //    for (const auto& hand : handedness) 
-//                                //    {
-//                                //        std::cout << "-hand-" << i++ << " : " << hand.DebugString();
-//                                //    }
-//                                return mediapipe::OkStatus();
-//                              }));
-
-//      ASSIGN_OR_RETURN(mediapipe::OutputStreamPoller poller_multipalm,
-//                   graph.AddOutputStreamPoller(kMultipalmStream));
-
   MP_RETURN_IF_ERROR(graph.StartRun({}));
 
   LOG(INFO) << "Start grabbing and processing frames.";
@@ -185,18 +132,16 @@ absl::Status RunMPPGraph() {
         kInputStream, mediapipe::Adopt(input_frame.release())
                           .At(mediapipe::Timestamp(frame_timestamp_us))));
 
-    // Get the graph result packet, or stop if that fails.
+    // Get the graph result packet and stop if it fails.
     mediapipe::Packet packet;
+    if (!poller.Next(&packet)) break;
+  
     mediapipe::Packet landmark_packet;
     mediapipe::Packet handidness_packet;
-
-    if (!poller.Next(&packet)) break;
-
-    std::cout << poller_landmarks.QueueSize() << std::endl;
-    
     if (poller_landmarks.QueueSize() != poller_handidness.QueueSize())
         std::cout << "Queue Missmatch:" << poller_landmarks.QueueSize() << " : " << poller_handidness.QueueSize() << std::endl;
 
+    //check that palms and hands are detected
     if (poller_landmarks.QueueSize() > 0 && poller_handidness.QueueSize() > 0)
     {
       if (!poller_handidness.Next(&handidness_packet)) break;
@@ -225,53 +170,12 @@ absl::Status RunMPPGraph() {
             mes.addFloat32 (landmark.y());
             mes.addFloat32 (landmark.z());
           }
-          //
-          //mes.addFloat32 (landmark.x());
-          
           sender.send (mes, "127.0.0.1"   , 8000);
         }
       }
-      else
-      {
-        std::cout << "LandmarkList is a different size to the handidnessList:" << std::endl;
-      }
-    // std::cout << "We have handidness" << std::endl;
-    // auto& handidnessListVec = handidness_packet.Get<std::vector<::mediapipe::ClassificationList>>();
-    // std::cout << "handidnessListVec_size: " << handidnessListVec.size() << std::endl;
-
-    //for (auto& handidnessList : handidnessListVec)
-    //{       
-    //    //std::cout << handidnessList.DebugString() << std::endl;
-    //    auto& classification = handidnessList.classification(0);
-    //    std::cout << "dicpic: " << classification.index() << " : " << classification.label() << " : " << classification.score() <<  std::endl;
-    //}
-
-    // 
-    // std::cout << "landmark_size: " << handidnessListVec.size() << std::endl;
-    // 
-    // std::cout << "We have landmarks" << std::endl;
-    // auto& landmarkListVec = landmark_packet.Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
-    // for (auto& landmarkList : landmarkListVec)
-    // {
-    //   std::cout << "List size: " << landmarkList.landmark_size() << std::endl;
-    //   std::cout << "First landmark: " << landmarkList.landmark(0).DebugString() << std::endl;
-    //   //OscMessage message ("/tits", 1, 2.2f);
-    //   //sender.send (message, "127.0.0.1"   , 8000);
-    // }
-      
-
     } 
-    else 
-    {
-       std::cout << "Landmark and Handedness packect counts are different" << std::endl;
-    }
-
- //   while (poller_multipalm.QueueSize() > 0)
- //     if (!poller_multipalm.Next(&multipalm_packet));
 
     auto& output_frame = packet.Get<mediapipe::ImageFrame>();
-//    auto& output_landmarks = landmark_packet.Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
-
     // Convert back to opencv for display or saving.
     cv::Mat output_frame_mat = mediapipe::formats::MatView(&output_frame);
     cv::cvtColor(output_frame_mat, output_frame_mat, cv::COLOR_RGB2BGR);
@@ -290,12 +194,6 @@ absl::Status RunMPPGraph() {
       const int pressed_key = cv::waitKey(5);
       if (pressed_key >= 0 && pressed_key != 255) grab_frames = false;
     }
-
-    // printout landmark values
-//    for (const auto& landmark : output_landmarks) 
-//    {
-//        std::cout << landmark.DebugString();
-//    }
   }
 
   LOG(INFO) << "Shutting down.";
