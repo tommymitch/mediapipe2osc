@@ -21,7 +21,7 @@ Now install [Xcode](https://developer.apple.com/xcode/) and its Command Line too
 xcode-select --install
 ```
 
-MediaPipe requires [Bazel](https://www.bazel.build/) [OpenCV](https://opencv.org/) and [FFmpeg](https://www.ffmpeg.org/). I'd recommend  installing these with [Homebrew](https://brew.sh/), which can be installed as follows:
+MediaPipe requires [Bazel](https://www.bazel.build/), [OpenCV](https://opencv.org/) and [FFmpeg](https://www.ffmpeg.org/). I'd recommend  installing these with [Homebrew](https://brew.sh/), which can be installed as follows:
 
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -30,9 +30,9 @@ Now install bazelisk:
 ```sh
 brew install bazelisk
 ```
-and 
+and OpenCV, which includes FFmpeg
 ```sh
-brew install opencv@3 (which includes FFmpeg)
+brew install opencv@3
 ```
 There is a known issue caused by the glog dependency, so uninstall glog:
 
@@ -53,13 +53,13 @@ GLOG_logtostderr=1 bazel-bin/mediapipe/examples/desktop/hand_tracking/hand_track
 
 Landmarks are streamed as UDP datagrams in OSC format on port 8000. 
 
-The OSC address pattern is either `/left` or `/right` for detected hands followed by 63 float32 arguments which are the x, y, z coordinates of the 21 landmarks shown below. 
+The OSC address pattern is either `/left` or `/right` for detected hands, and is followed by 63 float32 arguments which are the x, y, z coordinates of the 21 landmarks shown below. 
 
 ![!Hand landmarks](docs/images/mobile/hand_landmarks.png)
 
-That is, the 1st, 2nd and 3rd arguments are the `x`, `y` and `z` coordinates of the `WRIST` landmark, etc.
+That is, the 1st, 2nd and 3rd arguments are the `x`, `y` and `z` coordinates of the `WRIST` landmark, etc. See the [oscexamples](oscexamples/) folder for further info.
 
-The `x` and `y` values are in the range `0.0` to `1.0` and represent the position of the landmark relative to the camera image height and width. The `z` value is a depth estimation which is relative to the wrist and can be -ve.
+The `x` and `y` values are in the range `0.0` to `1.0` and represent the position of the landmark relative to the camera image height and width. The `z` value is a depth estimation relative to the wrist and can be -ve.
 
 ---
 # Info
