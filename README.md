@@ -26,15 +26,15 @@ MediaPipe requires [Bazel](https://www.bazel.build/), [OpenCV](https://opencv.or
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
-Now install bazelisk:
+Now install Bazelisk:
 ```sh
 brew install bazelisk
 ```
-and OpenCV, which includes FFmpeg
+and OpenCV, which includes FFmpeg:
 ```sh
 brew install opencv@3
 ```
-There is a known issue caused by the glog dependency, so uninstall glog:
+There is a known issue with the glog dependency, so uninstall glog:
 
 ```sh
 $ brew uninstall --ignore-dependencies glog
@@ -57,7 +57,7 @@ The OSC address pattern is either `/left` or `/right` for detected hands, and is
 
 ![!Hand landmarks](docs/images/mobile/hand_landmarks.png)
 
-That is, the 1st, 2nd and 3rd arguments are the `x`, `y` and `z` coordinates of the `WRIST` landmark, etc. See the [oscexamples](oscexamples/) folder for further info.
+That is, the 1st, 2nd and 3rd arguments are the `x`, `y` and `z` coordinates of the `WRIST` landmark, etc. For further details see the [oscexamples](oscexamples/).
 
 The `x` and `y` values are in the range `0.0` to `1.0` and represent the position of the landmark relative to the camera image height and width. The `z` value is a depth estimation relative to the wrist and can be -ve.
 
@@ -68,5 +68,5 @@ This project was developed by [Tom Mitchell](https://go.uwe.ac.uk/tom) [@teamaxe
 - [University of the West of England](https://uwe.ac.uk)
 - [MiMU Gloves Ltd](https://mimugloves.com/)
 
-<img src="docs/images/bbcrd.png" alt="Bristol and Bath Creative R+D" height="30"/><img src="docs/images/ctl.png" alt="Creative Technologies Lab" height="30"/><img src="docs/images/mimu.png" alt="MiMU Gloves" height="30"/><img src="docs/images/uwe.png" alt="UWE, Bristol" height="30"/><img src="docs/images/mediapipe_small.png" alt="MediaPipe" height="30"/>
+<img src="docs/images/bbcrd.png" alt="Bristol and Bath Creative R+D" height="34"/><img src="docs/images/ctl.png" alt="Creative Technologies Lab" height="34"/><img src="docs/images/mimu.png" alt="MiMU Gloves" height="34"/><img src="docs/images/uwe.png" alt="UWE, Bristol" height="34"/><img src="docs/images/mediapipe_small.png" alt="MediaPipe" height="34"/>
 
